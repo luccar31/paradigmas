@@ -1,8 +1,6 @@
 package com.ldav.tareaclase3;
 
-import static com.ldav.tareaclase3.IntervalUtil.isInfinity;
-
-public class OpenedInterval extends AbstractInterval {
+public class OpenedInterval extends Interval {
     private OpenedInterval(double start, double end) {
         super(start, end);
     }
@@ -16,22 +14,9 @@ public class OpenedInterval extends AbstractInterval {
         return isAfterStart(number) && isBeforeEnd(number);
     }
 
-    private boolean isBeforeEnd(double otherEnd) {
-        return Double.compare(otherEnd, this.end) < 0;
-    }
-
-    private boolean isAfterStart(double otherStart) {
-        return Double.compare(otherStart, this.start) > 0;
-    }
-
-    @Override // TODO: 5/9/23 repeticion de codigo 
-    public boolean contains(Interval other) {
-        return this.equals(other) || this.containsInternal(other);
-    }
-
     @Override
     protected boolean containsInternal(Interval other) {
-        return isAfterStart(other.getStart()) && isBeforeEnd(other.getEnd());
+        return isAfterStart(other.end) && isBeforeEnd(other.end);
     }
 
     @Override
@@ -39,25 +24,39 @@ public class OpenedInterval extends AbstractInterval {
         return false;
     }
 
-    @Override // TODO: 5/9/23 repeticion de codigo
-    public OpenedInterval shift(double number) {
-        if(isInfinity(number)) throw new IllegalArgumentException("Can't shift interval by infinite amount!");
-        return OpenedInterval.createFrom(this.start + number, this.end + end);
+    @Override
+    protected Interval createConcreteInterval(double start, double end) {
+        return OpenedInterval.createFrom(start, end);
     }
 
     @Override
-    public int compareTo(Interval o) {
+    public int compareTo(Interval other) {
         return 0;
     }
 
     @Override
+    protected int resolveComparison() {
+        return -1;
+    }
+
+    @Override
     public boolean equals(Object o) {
-        if (!(o instanceof OpenedInterval)) return false;
+        if (!(o instanceof OpenedInterval)) {
+            return false;
+        }
         return super.equals(o);
     }
 
     @Override
-    public int hashCode() {
-        return super.hashCode();
+    public String toString() {
+        return "(" + start + ";" + end + ")";
+    }
+
+    private boolean isBeforeEnd(double otherEnd) {
+        return Double.compare(otherEnd, this.end) < 0;
+    }
+
+    private boolean isAfterStart(double otherStart) {
+        return Double.compare(otherStart, this.start) > 0;
     }
 }

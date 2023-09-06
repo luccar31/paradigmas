@@ -2,7 +2,7 @@ package com.ldav.tareaclase3;
 
 import static com.ldav.tareaclase3.IntervalUtil.isInfinity;
 
-public class ClosedInterval extends AbstractInterval {
+public class ClosedInterval extends Interval {
 
     private ClosedInterval(double start, double end) {
         super(start, end);
@@ -17,7 +17,7 @@ public class ClosedInterval extends AbstractInterval {
 
     @Override
     protected boolean containsInternal(Interval other) {
-        return isAfterOrAtStart(other.getStart()) && isBeforeOrAtEnd(other.getEnd());
+        return isAfterOrAtStart(other.start) && isBeforeOrAtEnd(other.end);
     }
 
     @Override
@@ -26,35 +26,24 @@ public class ClosedInterval extends AbstractInterval {
     }
 
     @Override
-    public boolean contains(Interval other) {
-        return this.equals(other) || this.containsInternal(other);
-    }
-
-    @Override
     public boolean intersecs(Interval other) {
         return false;
     }
 
     @Override
-    public ClosedInterval shift(double number) {
-        if(isInfinity(number)) throw new IllegalArgumentException("Can't shift interval by infinite amount!");
-        return ClosedInterval.createFrom(this.start + number, this.end + number);
+    protected Interval createConcreteInterval(double start, double end) {
+        return ClosedInterval.createFrom(start, end);
     }
 
     @Override
-    public int compareTo(Interval o) {
-        return 0;
+    protected int resolveComparison() {
+        return 1;
     }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof ClosedInterval)) return false;
         return super.equals(o);
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
     }
 
     @Override

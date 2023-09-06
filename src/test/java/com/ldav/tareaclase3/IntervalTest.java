@@ -61,4 +61,15 @@ public class IntervalTest {
         Assertions.assertTrue(bigger.contains(smaller));
         Assertions.assertFalse(smaller.contains(bigger));
     }
+
+    @Test
+    public void closedBiggerThanOpened() {
+        Interval bigger = ClosedInterval.createFrom(0d, 10d);
+        Interval smaller = OpenedInterval.createFrom(0d, 10d);
+
+        Assertions.assertTrue(bigger.compareTo(smaller) > 0);
+        Assertions.assertTrue(smaller.compareTo(bigger) < 0);
+        Assertions.assertEquals(0, smaller.compareTo(smaller));
+
+    }
 }
